@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#2864ed">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Check-in Legends">
+  <title>Check-in Legends</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+  <header class="app-header">
+    <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="appMenu"><span></span><span></span><span></span></button>
+    <div class="app-logo"><img src="assets/img/logo.png" data-theme-logo alt="Nordeste Legends"></div>
+    <div class="app-title"><span>CHECK-IN</span><strong id="eventTitle">LEGENDS</strong></div>
+    <button id="quickPdf" class="blue" disabled>Gerar PDFs ↗</button>
+  </header>
+
+  <div id="menuScrim" class="menu-scrim" hidden></div>
+  <aside id="appMenu" class="app-menu" aria-hidden="true">
+    <header><img src="assets/img/logo.png" data-theme-logo alt="Nordeste Legends"><button id="menuClose" aria-label="Fechar menu">×</button></header>
+    <nav aria-label="Menu principal">
+      <button data-menu-action="new"><span>＋</span>Nova Lista</button><button data-menu-action="open"><span>▤</span>Abrir Lista</button><button data-menu-action="save"><span>↓</span>Salvar Lista</button><hr><button data-menu-action="settings"><span>⚙</span>Configurações</button><button data-menu-action="about"><span>ⓘ</span>Sobre</button>
+    </nav>
+  </aside>
+
+  <main class="workspace">
+    <div class="workspace-head">
+      <div><small>CONFERÊNCIA</small><h1>Atletas e serviços</h1><p id="count">Nenhuma lista importada</p></div>
+      <div id="listActions" class="list-actions" hidden><button id="newRecord" class="secondary" disabled title="Disponível em breve">Novo registro</button><button id="clearList" class="danger">Limpar lista</button></div>
+    </div>
+
+    <div id="warning" class="warning" hidden></div>
+    <div id="emptyState" class="empty-state">
+      <button id="openImport" class="empty-icon" aria-label="Importar lista" title="Importar lista">＋</button>
+      <h2>Lista vazia</h2>
+      <p>Para importar a lista do evento, clique no “+” acima.</p>
+    </div>
+    <div id="tableWrap" class="table-wrap" hidden><table><thead><tr><th>Atleta</th><th>Dobras</th><th>Pintura</th><th>Fotografia</th><th>Backstage</th><th>Plateia</th></tr></thead><tbody id="athleteRows"></tbody></table></div>
+
+  </main>
+
+  <div id="importModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="importModal"></div>
+    <section class="modal-card import-modal" role="dialog" aria-modal="true" aria-labelledby="importTitle">
+      <header><div><small>NOVO EVENTO</small><h2 id="importTitle">Importar lista</h2></div><button class="modal-close" data-close="importModal" aria-label="Fechar">×</button></header>
+      <div class="fields">
+        <label>Nome do evento<input id="event" value="Recife Legends"></label>
+        <label>Data do evento<input id="date" type="date" value="2026-08-02"></label>
+      </div>
+      <label class="logo-field">Logotipo do evento <small>PNG, JPG OU WEBP</small><input id="logo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <label class="raw-label">Lista recebida <small>INSCRIÇÕES, PINTURA, FOTOGRAFIA E BACKSTAGE</small><textarea id="raw" spellcheck="false" placeholder="Cole aqui a lista completa do evento..."></textarea></label>
+      <footer><span>Você poderá corrigir todos os dados na conferência.</span><button id="process" class="blue">Importar e conferir →</button></footer>
+    </section>
+  </div>
+
+  <div id="documentsModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="documentsModal"></div>
+    <section class="modal-card documents-modal" role="dialog" aria-modal="true" aria-labelledby="documentsTitle">
+      <header><div><small>DOCUMENTOS</small><h2 id="documentsTitle">Gerar PDFs</h2></div><div class="modal-actions"><button id="print" class="blue">Imprimir / salvar PDF ↗</button><button class="modal-close" data-close="documentsModal" aria-label="Fechar">×</button></div></header>
+      <div class="doc-options">
+        <button data-mode="services" class="selected"><b>☷</b><strong>Listas por serviço</strong><span>Nomes agrupados por contratação.</span></button>
+        <button data-mode="cards"><b>▦</b><strong>Fichas dos atletas</strong><span>Blocos individuais para o check-in.</span></button>
+      </div>
+      <div class="preview"><header><b id="previewLabel">PRÉVIA · LISTAS POR SERVIÇO</b></header><div id="previewPaper"></div></div>
+    </section>
+  </div>
+
+  <div id="openListModal" class="modal" hidden><div class="modal-backdrop" data-close="openListModal"></div><section class="modal-card compact-modal" role="dialog" aria-modal="true" aria-labelledby="openListTitle"><header><div><small>CAMPEONATOS SALVOS</small><h2 id="openListTitle">Abrir Lista</h2></div><button class="modal-close" data-close="openListModal" aria-label="Fechar">×</button></header><div id="savedLists" class="saved-lists"></div></section></div>
+  <div id="settingsModal" class="modal" hidden><div class="modal-backdrop" data-close="settingsModal"></div><section class="modal-card compact-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><header><div><small>PREFERÊNCIAS</small><h2 id="settingsTitle">Configurações</h2></div><button class="modal-close" data-close="settingsModal" aria-label="Fechar">×</button></header><fieldset class="theme-options"><legend>Tema do aplicativo</legend><label><input type="radio" name="theme" value="light">Claro</label><label><input type="radio" name="theme" value="dark">Escuro</label><label><input type="radio" name="theme" value="auto">Automático <small>USA O TEMA DO DISPOSITIVO</small></label></fieldset></section></div>
+  <div id="aboutModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="aboutModal"></div>
+    <section class="modal-card about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <header><h2 id="aboutTitle">Sobre</h2><button class="modal-close" data-close="aboutModal" aria-label="Fechar">×</button></header>
+      <div class="about-content">
+        <img class="about-app-icon" src="assets/icons/logo_checkin.png" alt="Ícone do Check-in Legends">
+        <h3>Check-in Legends</h3>
+        <p>Versão 1.0.0</p>
+        <img class="about-brand-logo" src="assets/img/logo.png" data-theme-logo alt="Nordeste Legends">
+        <strong class="about-credit">Desenvolvido por LT ARTS</strong>
+      </div>
+    </section>
+  </div>
+  <div id="printArea"></div>
+  <script src="app.js"></script>
+</body>
+</html>
