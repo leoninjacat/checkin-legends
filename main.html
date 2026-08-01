@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#2864ed">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,8 +13,13 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ui.css">
+  <script>(function(){var t=localStorage.getItem('checkin-legends-theme')||'auto';if(t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.dataset.theme='dark'})()</script>
+  <style>
+    .launch-splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#fff 0,#f4f7fb 55%,#e9eef6 100%);transition:opacity .25s ease,visibility .25s ease}.launch-splash.is-hidden{opacity:0;visibility:hidden;pointer-events:none}.launch-splash__content{display:flex;flex-direction:column;align-items:center;animation:launch-enter .45s ease-out both}.launch-splash img{width:clamp(112px,30vw,152px);border-radius:31%;filter:drop-shadow(0 18px 28px #0d1b3426)}.launch-splash h1{margin:24px 0 5px;font-size:clamp(22px,6vw,30px);letter-spacing:-.03em}.launch-splash p{margin:0;color:#687386;font-size:13px;letter-spacing:.08em;text-transform:uppercase}.launch-splash__loader{width:42px;height:3px;margin-top:28px;overflow:hidden;border-radius:99px;background:#d9e1ed}.launch-splash__loader::after{content:"";display:block;width:55%;height:100%;border-radius:inherit;background:#00a624;animation:launch-load .8s ease-in-out infinite alternate}:root[data-theme="dark"] .launch-splash{background:radial-gradient(circle at 50% 38%,#172033 0,#0b1220 58%,#070c16 100%)}:root[data-theme="dark"] .launch-splash h1{color:#eef4ff}:root[data-theme="dark"] .launch-splash p{color:#a9b5c7}:root[data-theme="dark"] .launch-splash__loader{background:#334155}@keyframes launch-enter{from{opacity:0;transform:translateY(8px) scale(.98)}}@keyframes launch-load{from{transform:translateX(-85%)}to{transform:translateX(165%)}}@media(prefers-reduced-motion:reduce){.launch-splash__content,.launch-splash__loader::after{animation:none}}
+  </style>
 </head>
 <body>
+  <div id="launchSplash" class="launch-splash" aria-label="Iniciando Check-in Legends"><div class="launch-splash__content"><img src="assets/icons/icon-512.png" alt=""><h1>Check-in Legends</h1><p>Nordeste Legends</p><div class="launch-splash__loader" aria-hidden="true"></div></div></div>
   <header class="app-header">
     <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="appMenu"><span></span><span></span><span></span></button>
     <div class="app-logo"><img src="assets/img/logo.png" data-theme-logo alt="Nordeste Legends"></div>
@@ -26,7 +31,15 @@
   <aside id="appMenu" class="app-menu" aria-hidden="true">
     <header><img src="assets/img/logo.png" data-theme-logo alt="Nordeste Legends"><button id="menuClose" aria-label="Fechar menu">×</button></header>
     <nav aria-label="Menu principal">
-      <button data-menu-action="new"><span>＋</span>Nova Lista</button><button data-menu-action="open"><span>▤</span>Abrir Lista</button><button data-menu-action="save"><span>↓</span>Salvar Lista</button><hr><button data-menu-action="settings"><span>⚙</span>Configurações</button><button data-menu-action="about"><span>ⓘ</span>Sobre</button>
+      <button data-menu-action="new"><span>＋</span>Nova lista</button>
+      <button data-menu-action="open"><span>▤</span>Abrir lista</button>
+      <button data-menu-action="save"><span>↓</span>Salvar lista</button>
+      <hr>
+      <button data-menu-action="import"><span>⇣</span>Importar atletas</button>
+      <button data-menu-action="export"><span>⇡</span>Exportar atletas</button>
+      <hr>
+      <button data-menu-action="settings"><span>⚙</span>Configurações</button>
+      <button data-menu-action="about"><span>ⓘ</span>Sobre</button>
     </nav>
   </aside>
 
@@ -73,6 +86,16 @@
   </div>
 
   <div id="openListModal" class="modal" hidden><div class="modal-backdrop" data-close="openListModal"></div><section class="modal-card compact-modal" role="dialog" aria-modal="true" aria-labelledby="openListTitle"><header><div><small>CAMPEONATOS SALVOS</small><h2 id="openListTitle">Abrir Lista</h2></div><button class="modal-close" data-close="openListModal" aria-label="Fechar">×</button></header><div id="savedLists" class="saved-lists"></div></section></div>
+  <div id="exportModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="exportModal"></div>
+    <section class="modal-card compact-modal export-modal" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+      <header><div><small>INSCRIÇÕES + DOBRAS</small><h2 id="exportTitle">Exportar atletas</h2></div><button class="modal-close" data-close="exportModal" aria-label="Fechar">×</button></header>
+      <p class="export-description">Nomes em ordem alfabética, prontos para copiar.</p>
+      <label class="export-label" for="exportNames">Lista de atletas</label>
+      <textarea id="exportNames" class="export-names" readonly spellcheck="false"></textarea>
+      <footer><span id="exportCount"></span><div class="export-actions"><span id="copyStatus" class="copy-status" role="status" aria-live="polite"></span><button id="copyExport" class="blue">Copiar lista</button></div></footer>
+    </section>
+  </div>
   <div id="settingsModal" class="modal" hidden><div class="modal-backdrop" data-close="settingsModal"></div><section class="modal-card compact-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><header><div><small>PREFERÊNCIAS</small><h2 id="settingsTitle">Configurações</h2></div><button class="modal-close" data-close="settingsModal" aria-label="Fechar">×</button></header><fieldset class="theme-options"><legend>Tema do aplicativo</legend><label><input type="radio" name="theme" value="light">Claro</label><label><input type="radio" name="theme" value="dark">Escuro</label><label><input type="radio" name="theme" value="auto">Automático <small>USA O TEMA DO DISPOSITIVO</small></label></fieldset></section></div>
   <div id="aboutModal" class="modal" hidden>
     <div class="modal-backdrop" data-close="aboutModal"></div>
@@ -89,5 +112,13 @@
   </div>
   <div id="printArea"></div>
   <script src="app.js"></script>
+  <script>
+    (function(){
+      const splash=document.getElementById('launchSplash');
+      const cameFromSplash=new URLSearchParams(location.search).has('from');
+      if(cameFromSplash){splash.remove();history.replaceState(null,'',location.pathname);return}
+      window.setTimeout(()=>{splash.classList.add('is-hidden');window.setTimeout(()=>splash.remove(),260)},850);
+    })();
+  </script>
 </body>
 </html>

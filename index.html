@@ -2,10 +2,24 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="refresh" content="0;url=main.html">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
   <title>Check-in Legends</title>
-  <link rel="canonical" href="main.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <script>(function(){var t=localStorage.getItem('checkin-legends-theme')||'auto';if(t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.dataset.theme='dark';document.querySelector('meta[name="theme-color"]').content='#0b1220'}})()</script>
+  <style>
+    *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}body{background:#f4f7fb;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033}.splash{position:fixed;inset:0;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom));background:radial-gradient(circle at 50% 38%,#fff 0,#f4f7fb 55%,#e9eef6 100%)}.splash__content{display:flex;flex-direction:column;align-items:center;animation:enter .45s ease-out both}.splash__icon{width:clamp(112px,30vw,152px);height:auto;border-radius:31%;filter:drop-shadow(0 18px 28px #0d1b3426)}.splash__title{margin:24px 0 5px;font-size:clamp(22px,6vw,30px);letter-spacing:-.03em}.splash__subtitle{margin:0;color:#687386;font-size:13px;letter-spacing:.08em;text-transform:uppercase}.splash__loader{width:42px;height:3px;margin-top:28px;overflow:hidden;border-radius:99px;background:#d9e1ed}.splash__loader::after{content:"";display:block;width:55%;height:100%;border-radius:inherit;background:#00a624;animation:load .8s ease-in-out infinite alternate}:root[data-theme="dark"] body{background:#0b1220;color:#eef4ff}:root[data-theme="dark"] .splash{background:radial-gradient(circle at 50% 38%,#172033 0,#0b1220 58%,#070c16 100%)}:root[data-theme="dark"] .splash__subtitle{color:#a9b5c7}:root[data-theme="dark"] .splash__loader{background:#334155}@keyframes enter{from{opacity:0;transform:translateY(8px) scale(.98)}}@keyframes load{from{transform:translateX(-85%)}to{transform:translateX(165%)}}@media(prefers-reduced-motion:reduce){.splash__content,.splash__loader::after{animation:none}}
+  </style>
 </head>
-<body><p>Abrindo o <a href="main.html">Check-in Legends</a>…</p></body>
+<body>
+  <main class="splash" aria-label="Iniciando Check-in Legends">
+    <div class="splash__content">
+      <img class="splash__icon" src="assets/icons/icon-512.png" alt="">
+      <h1 class="splash__title">Check-in Legends</h1>
+      <p class="splash__subtitle">Nordeste Legends</p>
+      <div class="splash__loader" aria-hidden="true"></div>
+    </div>
+  </main>
+  <script>window.setTimeout(function(){window.location.replace('main.html?from=splash')},850)</script>
+</body>
 </html>
