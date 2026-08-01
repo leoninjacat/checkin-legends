@@ -1,4 +1,4 @@
-const CACHE_NAME='checkin-legends-v5';
+const CACHE_NAME='checkin-legends-v9';
 const APP_SHELL=[
   './',
   './index.html',

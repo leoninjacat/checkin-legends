@@ -46,7 +46,7 @@
   <main class="workspace">
     <div class="workspace-head">
       <div><small>CONFERÊNCIA</small><h1>Atletas e serviços</h1><p id="count">Nenhuma lista importada</p></div>
-      <div id="listActions" class="list-actions" hidden><button id="newRecord" class="secondary" disabled title="Disponível em breve">Novo registro</button><button id="clearList" class="danger">Limpar lista</button></div>
+      <div id="listActions" class="list-actions" hidden><button id="newRecord" class="secondary">Novo registro</button><button id="clearList" class="danger">Limpar lista</button></div>
     </div>
 
     <div id="warning" class="warning" hidden></div>
@@ -55,7 +55,7 @@
       <h2>Lista vazia</h2>
       <p>Para importar a lista do evento, clique no “+” acima.</p>
     </div>
-    <div id="tableWrap" class="table-wrap" hidden><table><thead><tr><th>Atleta</th><th>Dobras</th><th>Pintura</th><th>Fotografia</th><th>Backstage</th><th>Plateia</th></tr></thead><tbody id="athleteRows"></tbody></table></div>
+    <div id="tableWrap" class="table-wrap" hidden><table><thead><tr><th>Atleta</th><th>Dobras</th><th>Pintura</th><th>Fotografia</th><th>Backstage</th><th>Plateia</th><th>Ações</th></tr></thead><tbody id="athleteRows"></tbody></table></div>
 
   </main>
 
@@ -70,6 +70,38 @@
       <label class="logo-field">Logotipo do evento <small>PNG, JPG OU WEBP</small><input id="logo" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <label class="raw-label">Lista recebida <small>INSCRIÇÕES, PINTURA, FOTOGRAFIA E BACKSTAGE</small><textarea id="raw" spellcheck="false" placeholder="Cole aqui a lista completa do evento..."></textarea></label>
       <footer><span>Você poderá corrigir todos os dados na conferência.</span><button id="process" class="blue">Importar e conferir →</button></footer>
+    </section>
+  </div>
+
+  <div id="newRecordModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="newRecordModal"></div>
+    <section class="modal-card compact-modal new-record-modal" role="dialog" aria-modal="true" aria-labelledby="newRecordTitle">
+      <header><div><small>LISTA ATUAL</small><h2 id="newRecordTitle">Novo registro</h2></div><button class="modal-close" data-close="newRecordModal" aria-label="Fechar">×</button></header>
+      <form id="newRecordForm">
+        <label for="recordName">Nome<input id="recordName" autocomplete="off" required placeholder="Nome completo"></label>
+        <fieldset class="record-services">
+          <legend>Serviços</legend>
+          <label><input id="recordPaint" type="checkbox"><span><strong>Pintura</strong><small>Adicionar à lista de pintura</small></span></label>
+          <label><input id="recordPhoto" type="checkbox"><span><strong>Fotografia</strong><small>Adicionar à lista de fotografia</small></span></label>
+        </fieldset>
+        <div class="record-quantities">
+          <label>Dobras<input id="recordFolds" type="number" min="0" step="1" value="0" inputmode="numeric"></label>
+          <label>Ingressos plateia<input id="recordAudience" type="number" min="0" step="1" value="0" inputmode="numeric"></label>
+          <label>Ingressos backstage<input id="recordBackstage" type="number" min="0" step="1" value="0" inputmode="numeric"></label>
+        </div>
+        <p id="newRecordError" class="form-error" role="alert" hidden></p>
+        <footer><span id="recordFormHint">O registro será incluído nesta lista.</span><button id="saveRecord" class="blue" type="submit">Adicionar</button></footer>
+      </form>
+    </section>
+  </div>
+
+  <div id="confirmationModal" class="modal" hidden>
+    <div id="confirmationBackdrop" class="modal-backdrop"></div>
+    <section class="modal-card confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmationTitle" aria-describedby="confirmationMessage">
+      <div class="confirmation-icon" aria-hidden="true">!</div>
+      <h2 id="confirmationTitle">Confirmar ação</h2>
+      <p id="confirmationMessage"></p>
+      <div class="confirmation-actions"><button id="cancelConfirmation" class="secondary" type="button">Cancelar</button><button id="confirmAction" class="danger" type="button">Confirmar</button></div>
     </section>
   </div>
 
