@@ -220,4 +220,17 @@ $$('[data-mode]').forEach(b=>b.onclick=()=>{$$('[data-mode]').forEach(x=>x.class
 $('#print').onclick=()=>{preview();window.print()};
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('#confirmationModal').hidden){finishConfirmation(false);return}$$('.modal:not([hidden])').forEach(m=>m.hidden=true)});
 restoreState();
-if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(error=>console.warn('Não foi possível ativar o modo offline.',error)));
+if('serviceWorker'in navigator)window.addEventListener('load',async()=>{
+  try{
+    const registration=await navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'});
+    const check=()=>{if(navigator.onLine)registration.update().catch(()=>{})};
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});
+    window.addEventListener('online',check);
+    check();
+    let prompted=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(prompted)return;prompted=true;
+      if(window.confirm('Nova versão do Check-in Legends disponível. Recarregar agora?'))window.location.reload();
+    });
+  }catch(error){console.warn('Não foi possível ativar o modo offline.',error)}
+});
