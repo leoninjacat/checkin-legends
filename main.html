@@ -38,6 +38,7 @@
       <hr>
       <button data-menu-action="import"><span>⇣</span>Importar atletas</button>
       <button data-menu-action="export"><span>⇡</span>Exportar atletas</button>
+      <button data-menu-action="cloud"><span>☁</span>Listas da equipe</button>
       <hr>
       <button data-menu-action="settings"><span>⚙</span>Configurações</button>
       <button data-menu-action="about"><span>ⓘ</span>Sobre</button>
@@ -122,6 +123,15 @@
   </div>
 
   <div id="openListModal" class="modal" hidden><div class="modal-backdrop" data-close="openListModal"></div><section class="modal-card compact-modal" role="dialog" aria-modal="true" aria-labelledby="openListTitle"><header><div><small>CAMPEONATOS SALVOS</small><h2 id="openListTitle">Abrir Lista</h2></div><button class="modal-close" data-close="openListModal" aria-label="Fechar">×</button></header><div id="savedLists" class="saved-lists"></div></section></div>
+  <div id="cloudModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close="cloudModal"></div>
+    <section class="modal-card compact-modal" role="dialog" aria-modal="true" aria-labelledby="cloudTitle">
+      <header><div><small>SINCRONIZAÇÃO</small><h2 id="cloudTitle">Listas da equipe</h2></div><button class="modal-close" data-close="cloudModal" aria-label="Fechar">×</button></header>
+      <p id="cloudStatus" role="status">Entre com sua conta autorizada para compartilhar listas.</p>
+      <form id="cloudLoginForm" class="cloud-form"><label>E-mail<input id="cloudEmail" type="email" autocomplete="username" required></label><label>Senha<input id="cloudPassword" type="password" autocomplete="current-password" required></label><button class="blue" type="submit">Entrar</button></form>
+      <div id="cloudControls" hidden><div class="cloud-actions"><button id="cloudSave" class="blue">Salvar na nuvem</button><button id="cloudRefresh" class="secondary">Atualizar listas</button><button id="cloudLogout" class="secondary">Sair</button></div><div id="cloudLists" class="saved-lists"></div></div>
+    </section>
+  </div>
   <div id="exportModal" class="modal" hidden>
     <div class="modal-backdrop" data-close="exportModal"></div>
     <section class="modal-card compact-modal export-modal" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
@@ -147,6 +157,9 @@
     </section>
   </div>
   <div id="printArea"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="cloud-config.js" onerror="void 0"></script>
+  <script src="cloud-sync.js"></script>
   <script src="app.js"></script>
   <script>
     (function(){
