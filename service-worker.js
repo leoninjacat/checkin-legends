@@ -1,4 +1,4 @@
-const CACHE_NAME='checkin-legends-v10';
+const CACHE_NAME='checkin-legends-v11';
 const APP_SHELL=[
   './',
   './index.html',
@@ -31,6 +31,15 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
     event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./main.html'))));
+    return;
+  }
+  // CSS/JS sempre tentam a rede primeiro; offline usa a última cópia disponível.
+  const path=new URL(event.request.url).pathname;
+  const codeAsset=/\.(?:js|css)$/.test(path);
+  if(codeAsset){
+    event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
+      if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy)))}return response
+    }).catch(()=>caches.match(event.request)));
     return;
   }
   event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response})));
