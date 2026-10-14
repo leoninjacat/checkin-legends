@@ -1,4 +1,4 @@
-const CACHE_NAME='checkin-legends-v9';
+const CACHE_NAME='checkin-legends-v10';
 const APP_SHELL=[
   './',
   './index.html',
@@ -6,6 +6,8 @@ const APP_SHELL=[
   './style.css',
   './ui.css',
   './app.js',
+  './cloud-sync.js',
+  './cloud-config.js',
   './manifest.webmanifest',
   './assets/img/logo.png',
   './assets/img/logo_dark.png',
