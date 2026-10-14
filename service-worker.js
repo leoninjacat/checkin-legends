@@ -1,4 +1,4 @@
-const CACHE_NAME='checkin-legends-v9';
+const CACHE_NAME='checkin-legends-v12';
 const APP_SHELL=[
   './',
   './index.html',
@@ -29,6 +29,15 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
     event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./main.html'))));
+    return;
+  }
+  // Arquivos de código sempre consultam a rede; o cache é somente fallback offline.
+  const isCode=/\.(js|css)$/.test(new URL(event.request.url).pathname);
+  if(isCode){
+    event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
+      if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy)));}
+      return response;
+    }).catch(()=>caches.match(event.request)));
     return;
   }
   event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response})));
