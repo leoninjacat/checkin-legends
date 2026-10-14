@@ -48,3 +48,5 @@ button{font-family:inherit}label,.doc-options button,.back{color:var(--ink)}
 
 /* A lista por serviço usa cartões em grade; as fichas individuais ficam na terceira aba. */
 #servicesView{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));align-content:start;align-items:start;gap:16px}#servicesView[hidden],#cardsView[hidden]{display:none}.workspace-tabs{overflow-x:auto;flex-shrink:0;white-space:nowrap}.workspace-tabs button{flex-shrink:0}
+
+.cloud-form{display:grid;gap:12px}.cloud-form label{display:grid;gap:6px;font-size:13px;font-weight:600}.cloud-form input{padding:10px;border:1px solid var(--line);border-radius:8px}.cloud-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}#cloudStatus{color:var(--muted);font-size:13px;margin-bottom:14px}#cloudControls[hidden],#cloudLoginForm[hidden]{display:none}
